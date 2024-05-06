@@ -8,6 +8,12 @@ from langchain_google_genai import ChatGoogleGenerativeAI
 from langchain.chains.question_answering import load_qa_chain
 from langchain.prompts import PromptTemplate
 import os
+import pickle
+
+# Load pickle file with dangerous deserialization enabled
+with open('faiss_index/index.pkl', 'rb') as f:
+    your_object = pickle.load(f)
+
 
 st.set_page_config(page_title="Document Genie", layout="wide")
 
@@ -66,7 +72,7 @@ def get_conversational_chain():
 
 def user_input(user_question, api_key):
     embeddings = GoogleGenerativeAIEmbeddings(model="models/embedding-001", google_api_key=api_key)
-    new_db = FAISS.load_local("faiss_index", embeddings)
+    new_db = FAISS.load_local("faiss_index", embeddings, allow_dangerous_deserialization=True)
     docs = new_db.similarity_search(user_question)
     chain = get_conversational_chain()
     response = chain({"input_documents": docs, "question": user_question}, return_only_outputs=True)
