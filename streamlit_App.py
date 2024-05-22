@@ -51,7 +51,6 @@ def get_text_chunks(text):
     return chunks
 
 def get_vector_store(text_chunks, api_key):
-    def get_vector_store(text_chunks, api_key):
     embeddings = GoogleGenerativeAIEmbeddings(model="models/embedding-model", api_key=api_key)
     try:
         embedded_texts = embed_with_retries(embeddings.embed_documents, text_chunks)
@@ -61,6 +60,7 @@ def get_vector_store(text_chunks, api_key):
     except: GoogleGenerativeAIError as e:
         print(f"Failed to embed documents: {e}")
         return None
+    
 
 def get_conversational_chain():
     prompt_template = """
