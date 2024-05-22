@@ -51,15 +51,9 @@ def get_text_chunks(text):
     return chunks
 
 def get_vector_store(text_chunks, api_key):
-    embeddings = GoogleGenerativeAIEmbeddings(model="models/embedding-model", api_key=api_key)
-    try:
-        embedded_texts = embed_with_retries(embeddings.embed_documents, text_chunks)
-        vector_store = FAISS.from_texts(text_chunks, embedding=embedded_texts)
-        vector_store.save_local("faiss_index")
-        return vector_store
-    except: GoogleGenerativeAIError as e:
-        print(f"Failed to embed documents: {e}")
-        return None
+    embeddings = GoogleGenerativeAIEmbeddings(model="models/embedding-001", google_api_key=api_key)
+    vector_store = FAISS.from_texts(text_chunks, embedding=embeddings)
+    vector_store.save_local("faiss_index")
     
 
 def get_conversational_chain():
